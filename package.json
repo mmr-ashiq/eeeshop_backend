@@ -1,0 +1,28 @@
+{
+  "name": "eeeshop_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmr-ashiq/eeeshop_backend.git"
+  },
+  "author": "mmr-shiq",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mmr-ashiq/eeeshop_backend/issues"
+  },
+  "homepage": "",
+  "dependencies": {
+    "dotenv": "^14.3.2",
+    "express": "^4.17.2",
+    "http-status-codes": "^2.2.0",
+    "mongoose": "^6.1.8",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.15"
+  }
+}

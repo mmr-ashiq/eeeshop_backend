@@ -13,8 +13,14 @@ const {
 	updateUserPassword,
 } = require('../controllers/user.controller');
 
-router.route('/').get(authenticateUser, authorizePermissions('admin', 'owner', 'user'), getAllUsers);
-router.route('/showMe').get(showCurrentUser);
+router
+	.route('/')
+	.get(
+		authenticateUser,
+		authorizePermissions('owner', 'admin', 'user'),
+		getAllUsers
+	);
+router.route('/showMe').get(authenticateUser, showCurrentUser);
 router.route('/updateUser').patch(updateUser);
 router.route('/updateUserPassword').patch(updateUserPassword);
 router.route('/:id').get(authenticateUser, getSingleUser);

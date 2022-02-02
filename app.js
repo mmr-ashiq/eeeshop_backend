@@ -10,8 +10,8 @@ const connectDB = require('./src/db/connect');
 const authRouter = require('./src/modules/routes/auth.route');
 const userRouter = require('./src/modules/routes/user.route');
 
-const notFoundMiddleware = require('./src/modules/core/middlewares/not-found');
-const errorHandlerMiddleware = require('./src/modules/core/middlewares/error-handler');
+const notFoundMiddleware = require('./src/modules/core/middlewares/not-found.middleware');
+const errorHandlerMiddleware = require('./src/modules/core/middlewares/error-handler.middleware');
 
 app.use(morgan('tiny'));
 app.use(express.json());

@@ -1,6 +1,10 @@
 const User = require('../models/user.model');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../../utils/errors');
+const {
+	createTokenForUser,
+	attachCookiesToResponse,
+} = require('../../utils/createTokenForUser');
 
 const getAllUsers = async (req, res) => {
 	const users = await User.find({ role: 'user' }).select('-password');
@@ -20,11 +24,40 @@ const showCurrentUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-	res.send(req.body);
+	const { email, name } = req.body;
+	if (!email || !name) {
+		throw new CustomError.BadRequestError(
+			'provide email and name to update user'
+		);
+	}
+
+	const user = await User.findOne(
+		{ _id: req.user.userId },
+		{ email, name },
+		{ new: true, runValidators: true }
+	);
 };
 
 const updateUserPassword = async (req, res) => {
-	res.send(req.body);
+	const { oldPassword, newPassword } = req.body;
+	if (!oldPassword || !newPassword) {
+		throw new CustomError.BadRequestError(
+			'provide old and new password both to change password'
+		);
+	}
+	const user = await User.findOne({ _id: req.user.userId });
+
+	const isPasswordValid = await user.comparePassword(oldPassword);
+	if (!isPasswordValid) {
+		throw new CustomError.UnauthenticatedError('Invalid Credentials');
+	}
+
+	user.password = newPassword;
+
+	await user.save();
+	res.status(StatusCodes.OK).json({
+		message: 'Password changed successfully',
+	});
 };
 
 module.exports = {

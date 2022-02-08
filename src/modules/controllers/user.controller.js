@@ -1,10 +1,8 @@
 const User = require('../models/user.model');
 const { StatusCodes } = require('http-status-codes');
 const CustomError = require('../../utils/errors');
-const {
-	createTokenForUser,
-	attachCookiesToResponse,
-} = require('../../utils/createTokenForUser');
+const createTokenForUser = require('../../utils/createTokenForUser');
+const { attachCookiesToResponse } = require('../../utils/jwt');
 
 const getAllUsers = async (req, res) => {
 	const users = await User.find({ role: 'user' }).select('-password');
@@ -31,11 +29,15 @@ const updateUser = async (req, res) => {
 		);
 	}
 
-	const user = await User.findOne(
+	const user = await User.findOneAndUpdate(
 		{ _id: req.user.userId },
 		{ email, name },
 		{ new: true, runValidators: true }
 	);
+
+	const tokenUser = createTokenForUser(user);
+	attachCookiesToResponse({ res, user: tokenUser });
+	res.status(StatusCodes.OK).json({ user: tokenUser });
 };
 
 const updateUserPassword = async (req, res) => {

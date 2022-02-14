@@ -27,22 +27,41 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
 	const products = await Product.find({});
-	res.status(StatusCodes.OK).json(products);
+
+	res.status(StatusCodes.OK).json({ products, cout: products.length });
 };
 
 const getSingleProduct = async (req, res) => {
 	const product = await Product.findOne({ _id: req.params.id });
 	if (!product) throw new CustomError.NotFoundError();
+
 	res.status(StatusCodes.OK).json({ product });
 };
 
 const updateProduct = async (req, res) => {
-	res.send('update product');
+	const { id: productId } = req.params;
+	const product = await Product.findOneAndUpdate(
+		{ _id: productId },
+		req.body,
+		{
+			new: true,
+			runValidators: true,
+		}
+	);
+
+	if (!product) throw new CustomError.NotFoundError();
+
+	res.status(StatusCodes.OK).json({ product });
 };
 
 const deleteProduct = async (req, res) => {
-	const product = await Product.findOneAndDelete({ _id: req.params.id });
+	const { id: productId } = req.params;
+	const product = await Product.findOne({ _id: productId });
+
 	if (!product) throw new CustomError.NotFoundError();
+
+	await Product.remove();
+	res.status(StatusCodes.OK).json({ msg: 'Product removed' });
 };
 
 const uploadProductImage = async (req, res) => {

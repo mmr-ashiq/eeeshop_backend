@@ -64,10 +64,19 @@ const updateUserPassword = async (req, res) => {
 	});
 };
 
+const deleteUser = async (req, res) => {
+	const user = await User.findOneAndDelete({ _id: req.params.id });
+	if (!user) throw new CustomError.NotFoundError();
+
+	checkPermissions(req.user, user._id);
+	res.status(StatusCodes.OK).json({ message: 'User deleted successfully' });
+};
+
 module.exports = {
 	getAllUsers,
 	getSingleUser,
 	showCurrentUser,
 	updateUser,
 	updateUserPassword,
+	deleteUser,
 };

@@ -11,6 +11,7 @@ const {
 	showCurrentUser,
 	updateUser,
 	updateUserPassword,
+	deleteUser,
 } = require('../controllers/user.controller');
 
 router
@@ -24,5 +25,6 @@ router.route('/showMe').get(authenticateUser, showCurrentUser);
 router.route('/updateUser').patch(authenticateUser, updateUser);
 router.route('/updateUserPassword').patch(authenticateUser, updateUserPassword);
 router.route('/:id').get(authenticateUser, getSingleUser);
+router.route('/:id').delete(authenticateUser, deleteUser);
 
 module.exports = router;

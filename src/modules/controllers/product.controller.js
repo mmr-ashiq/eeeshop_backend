@@ -7,6 +7,7 @@ const createProduct = async (req, res) => {
 	req.body.user = req.user.userId;
 
 	const productName = req.body.name;
+	
 	const product = await Product.findOne({ name: productName });
 	if (!product) {
 		const newProduct = new Product(req.body);
@@ -33,7 +34,9 @@ const getAllProducts = async (req, res) => {
 };
 
 const getSingleProduct = async (req, res) => {
-	const product = await Product.findOne({ _id: req.params.id });
+	const product = await Product.findOne({ _id: req.params.id }).populate(
+		'reviews'
+	);
 	if (!product) throw new CustomError.NotFoundError();
 
 	res.status(StatusCodes.OK).json({ product });

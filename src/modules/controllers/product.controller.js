@@ -7,7 +7,7 @@ const createProduct = async (req, res) => {
 	req.body.user = req.user.userId;
 
 	const productName = req.body.name;
-	
+
 	const product = await Product.findOne({ name: productName });
 	if (!product) {
 		const newProduct = new Product(req.body);
@@ -37,7 +37,7 @@ const getSingleProduct = async (req, res) => {
 	const product = await Product.findOne({ _id: req.params.id }).populate(
 		'reviews'
 	);
-	if (!product) throw new CustomError.NotFoundError();
+	if (!product) throw new CustomError.NotFoundError('Product not found');
 
 	res.status(StatusCodes.OK).json({ product });
 };
@@ -53,7 +53,7 @@ const updateProduct = async (req, res) => {
 		}
 	);
 
-	if (!product) throw new CustomError.NotFoundError();
+	if (!product) throw new CustomError.NotFoundError('Product not found');
 
 	res.status(StatusCodes.OK).json({ product });
 };
@@ -62,9 +62,9 @@ const deleteProduct = async (req, res) => {
 	const { id: productId } = req.params;
 	const product = await Product.findOne({ _id: productId });
 
-	if (!product) throw new CustomError.NotFoundError();
+	if (!product) throw new CustomError.NotFoundError('Product not found');
 
-	await Product.remove();
+	await product.remove();
 	res.status(StatusCodes.OK).json({ msg: 'Product removed' });
 };
 

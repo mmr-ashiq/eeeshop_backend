@@ -9,7 +9,8 @@ const createReview = async (req, res) => {
 	const { product: productId } = req.body;
 
 	const isValidProduct = await Product.findOne({ _id: productId });
-	if (!isValidProduct) throw new CustomError.NotFoundError();
+	if (!isValidProduct)
+		throw new CustomError.NotFoundError('Product not found');
 
 	const alreadySubmittedReview = await Review.findOne({
 		product: productId,
@@ -39,7 +40,7 @@ const getSingleReview = async (req, res) => {
 
 	const review = await Review.findOne({ _id: reviewId });
 
-	if (!review) throw new CustomError.NotFoundError();
+	if (!review) throw new CustomError.NotFoundError('review not found');
 
 	res.status(StatusCodes.OK).json({ review });
 };
@@ -49,7 +50,7 @@ const updateReview = async (req, res) => {
 	const { rating, title, comment } = req.body;
 
 	const review = await Review.findOne({ _id: reviewId });
-	if (!review) throw new CustomError.NotFoundError();
+	if (!review) throw new CustomError.NotFoundError('review not found');
 
 	checkPermissions(req.user, review.user);
 
@@ -66,7 +67,7 @@ const deleteReview = async (req, res) => {
 	const { id: reviewId } = req.params;
 
 	const review = await Review.findOne({ _id: reviewId });
-	if (!review) throw new CustomError.NotFoundError();
+	if (!review) throw new CustomError.NotFoundError('review not found');
 
 	checkPermissions(req.user, review.user);
 

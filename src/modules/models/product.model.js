@@ -99,6 +99,6 @@ ProductSchema.virtual('reviews', {
 	localField: '_id',
 	foreignField: 'product',
 	justOne: false,
-  });
+});
 
 module.exports = mongoose.model('Product', ProductSchema);

@@ -13,7 +13,7 @@ const getAllUsers = async (req, res) => {
 const getSingleUser = async (req, res) => {
 	const user = await User.findOne({ _id: req.params.id }).select('-password');
 
-	if (!user) throw new CustomError.NotFoundError();
+	if (!user) throw new CustomError.NotFoundError('user not found');
 	checkPermissions(req.user, user._id);
 
 	res.status(StatusCodes.OK).json({ user });
@@ -66,7 +66,7 @@ const updateUserPassword = async (req, res) => {
 
 const deleteUser = async (req, res) => {
 	const user = await User.findOneAndDelete({ _id: req.params.id });
-	if (!user) throw new CustomError.NotFoundError();
+	if (!user) throw new CustomError.NotFoundError('user not found');
 
 	checkPermissions(req.user, user._id);
 	res.status(StatusCodes.OK).json({ message: 'User deleted successfully' });

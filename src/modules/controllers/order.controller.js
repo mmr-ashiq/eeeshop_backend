@@ -24,7 +24,7 @@ const createOrder = async (req, res) => {
 	let subtotal = 0;
 
 	for (const item of cartItems) {
-		const product = await Product.findOne({ _id: item.productId});
+		const product = await Product.findOne({ _id: item.productId });
 		if (!product) {
 			throw new CustomError.NotFoundError('Product not found');
 		}
@@ -66,13 +66,34 @@ const createOrder = async (req, res) => {
 	});
 };
 
-const getAllOrders = async (req, res) => {};
+const getAllOrders = async (req, res) => {
+	const orders = await Order.find({});
+	res.status(StatusCodes.OK).json(orders, count: orders.length);
+};
 
-const getSingleOrder = async (req, res) => {};
+const getSingleOrder = async (req, res) => {
+	const { orderId } = req.params;
 
-const getCurrentUserOrders = async (req, res) => {};
+	const order = await Order.findOne({ _id: orderId });
+	if (!order) {
+		throw new CustomError.NotFoundError(`Order with id ${orderId} not found`);
+	}
 
-const updateOrder = async (req, res) => {};
+	checkPermissions(req.user, order.user);
+
+	res.status(StatusCodes.OK).json(order);
+};
+
+const getCurrentUserOrders = async (req, res) => {
+	const { userId } = req.user;
+
+	const orders = await Order.find({ user: userId });
+	res.status(StatusCodes.OK).json(orders, count: orders.length);
+};
+
+const updateOrder = async (req, res) => {
+	
+};
 
 module.exports = {
 	getAllOrders,

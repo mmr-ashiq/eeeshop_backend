@@ -68,7 +68,7 @@ const createOrder = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
 	const orders = await Order.find({});
-	res.status(StatusCodes.OK).json(orders, count: orders.length);
+	res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 
 const getSingleOrder = async (req, res) => {
@@ -81,18 +81,32 @@ const getSingleOrder = async (req, res) => {
 
 	checkPermissions(req.user, order.user);
 
-	res.status(StatusCodes.OK).json(order);
+	res.status(StatusCodes.OK).json({ order });
 };
 
 const getCurrentUserOrders = async (req, res) => {
 	const { userId } = req.user;
 
 	const orders = await Order.find({ user: userId });
-	res.status(StatusCodes.OK).json(orders, count: orders.length);
+	res.status(StatusCodes.OK).json({ orders, count: orders.length });
 };
 
 const updateOrder = async (req, res) => {
-	
+	const { id: orderId } = req.params;
+	const { paymentIntentId } = req.body;
+
+	const order = await Order.findOne({ _id: orderId });
+	if (!order) {
+		throw new CustomError.NotFoundError('Order not found');
+	}
+
+	checkPermissions(req.user, order.user);
+
+	order.paymentIntentId = paymentIntentId;
+	order.status = 'paid';
+	await order.save();
+
+	res.status(StatusCodes.OK).json({ order });
 };
 
 module.exports = {

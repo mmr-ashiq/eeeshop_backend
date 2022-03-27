@@ -38,7 +38,7 @@ const OrderSchema = mongoose.Schema(
         orderItems: [SingleOrderItemSchema],
         status: {
             type: String,
-            enum: ['pending', 'processing', 'completed', 'cancelled'],
+            enum: ['pending', 'paid', 'completed', 'cancelled'],
             default: 'pending',
         },
         clientSecret: {

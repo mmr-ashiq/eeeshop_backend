@@ -1,5 +1,5 @@
 # ✨ mmr-shop ✨
-An Ecommerce Backend REST-api
+> This repository contains the source code for the backend of the eeeshop e-commerce platform.
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://eeeshop-api.herokuapp.com/)
 

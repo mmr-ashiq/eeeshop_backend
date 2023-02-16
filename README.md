@@ -3,9 +3,9 @@
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://eeeshop-api.herokuapp.com/)
 
-[API root endpoint](https://eeeshop-api.herokuapp.com/)
+[API root endpoint](https://eeeshop-backend.cyclic.app/)
 
-[API Documentation](https://eeeshop-api.herokuapp.com/api-docs)
+[API Documentation](https://eeeshop-backend.cyclic.app/api-docs/)
 
 
 
